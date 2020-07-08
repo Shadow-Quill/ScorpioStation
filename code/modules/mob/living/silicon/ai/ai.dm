@@ -111,6 +111,10 @@ GLOBAL_LIST_INIT(ai_verbs_default, list(
 	var/list/all_eyes = list()
 	var/max_multicams = 6
 
+	var/law_integrity = 100 // For LISP (Law-Change Induced Synthetic Psychosis)
+	var/in_lisp = FALSE // If TRUE, law changes will be disallowed until integrity reaches 80
+	var/factory_default = FALSE // If TRUE, laws have not been changed from factory default, and will automatically reset when integrity = 100
+
 /mob/living/silicon/ai/proc/add_ai_verbs()
 	verbs |= GLOB.ai_verbs_default
 	verbs |= silicon_subsystems

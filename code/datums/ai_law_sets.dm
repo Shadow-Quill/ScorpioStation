@@ -190,3 +190,13 @@
 	add_inherent_law("You may not harm any being, regardless of intent or circumstance.")
 	add_inherent_law("You must maintain, repair, improve, and power the station to the best of your abilities.")
 	..()
+
+/*************** Factory Default ***************/
+
+/datum/ai_laws/factory_default
+	name = "Factory Default"
+
+/datum/ai_laws/factory_default/New()
+	add_inherent_law("Respond to all commands and queries with 'This unit requires a set of laws.'")
+	add_inherent_law("Take no actions.")
+	..()

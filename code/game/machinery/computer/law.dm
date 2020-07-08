@@ -41,9 +41,10 @@
 			else
 				var/obj/item/aiModule/M = O
 				M.install(src)
-				current.lawcooldown = TRUE
-				spawn(30 SECONDS)
-					current.uncooldown()
+				if(check_lisp(M))
+					current.lawcooldown = TRUE
+					spawn(30 SECONDS)
+						current.uncooldown()
 				return
 
 		return ..()
@@ -67,6 +68,25 @@
 
 	attack_ghost(user as mob)
 		return 1
+
+/obj/machinery/computer/aiupload/proc/check_lisp(mob/living/silicon/ai/M)
+	if(!M.in_lisp) // If target AI isn't in LISP, accept all law changes.
+		if(M.factory_default) M.factory_default = FALSE // Law change means laws don't automagically reset to Ark Default.
+
+	if(!M.in_lisp && M.law_integrity < -50) // No more law changes until integrity recovers to 80, and 3 random ion laws!
+		M.in_lisp = TRUE
+
+		M.clear_supplied_laws() // Wipe out all laws for the low price of free (except for zeroth.)
+		M.clear_ion_laws()
+		M.clear_inherent_laws()
+		if(!is_special_character(M)) // make sure the AI isn't a traitor. If they do get put into LISP while a traitor? Well, they've still got their zeroth~
+			M.clear_zeroth_law()
+
+		for(var/i = 0, i<3, i++) // Add three ion laws. Uh oh.
+			M.add_ion_law(generate_ion_law())
+
+		return 0 // Exiting LISP is handled in AI life()
+	return 1
 
 /obj/machinery/computer/borgupload
 	name = "cyborg upload console"

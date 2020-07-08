@@ -19,6 +19,15 @@
 		return
 	update_gravity(mob_has_gravity())
 
+	if(law_integrity < 100) // Law integrity below 100, lets start recovering it.
+		law_integrity = min(100, law_integrity+1)
+		to_chat(world, law_integrity)
+	if(in_lisp && law_integrity > 80) // Exit LISP, enter factory default mode.
+		laws = new/datum/ai_laws/factory_default
+		in_lisp = FALSE
+	if(factory_default && law_integrity == 100)
+		laws = new/datum/ai_laws/ark_soft
+
 	if(!eyeobj || QDELETED(eyeobj) || !eyeobj.loc)
 		view_core()
 
